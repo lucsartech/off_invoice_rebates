@@ -21,6 +21,7 @@ class RebateSettlement(Document):
 	def on_submit(self) -> None:
 		self._update_period_run_settlement_status()
 		self._dispatch_strategy()
+		self._post_accounting()
 		# Strategy may have flipped status to "posted"; default to "generated"
 		# only when nothing more granular has been written.
 		if not self.get("status") or self.status in ("draft", ""):
@@ -38,9 +39,25 @@ class RebateSettlement(Document):
 		strategy = get_strategy(self.settlement_mode)
 		strategy.settle(self)
 
+	def _post_accounting(self) -> None:
+		# Importing the package side-effect-registers all built-in policies.
+		from off_invoice_rebates import accounting  # noqa: F401
+		from off_invoice_rebates.accounting.base import get_policy
+
+		policy = get_policy(self.accounting_policy)
+		policy.post_settlement(self)
+
 	def on_cancel(self) -> None:
+		self._reverse_accounting()
 		self._restore_period_run_settlement_status()
 		self.db_set("status", "cancelled", update_modified=False)
+
+	def _reverse_accounting(self) -> None:
+		from off_invoice_rebates import accounting  # noqa: F401
+		from off_invoice_rebates.accounting.base import get_policy
+
+		policy = get_policy(self.accounting_policy)
+		policy.reverse_settlement(self)
 
 	# ------------------------------------------------------------------ helpers
 

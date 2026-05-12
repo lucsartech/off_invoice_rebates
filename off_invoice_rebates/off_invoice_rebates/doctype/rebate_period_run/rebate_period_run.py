@@ -28,7 +28,28 @@ class RebatePeriodRun(Document):
 	def on_submit(self) -> None:
 		# Lock — re-computation forbidden after submit.
 		# Settlement logic reads from this Run in F3.
-		pass
+		self._post_accrual()
+
+	def _post_accrual(self) -> None:
+		"""Dispatch to the F4 accounting policy for accrual posting.
+
+		``full_accrual`` posts a JE here; ``on_settlement`` / ``memo_only``
+		return ``None`` and the call is a cheap no-op.
+		"""
+		if not self.agreement:
+			return
+		try:
+			policy_code = frappe.db.get_value(
+				"Rebate Agreement", self.agreement, "accounting_policy"
+			)
+		except Exception:
+			return
+		if not policy_code:
+			return
+		from off_invoice_rebates import accounting  # noqa: F401
+		from off_invoice_rebates.accounting.base import get_policy
+
+		get_policy(policy_code).post_accrual(self)
 
 	def on_cancel(self) -> None:
 		linked = frappe.db.exists(
@@ -46,6 +67,23 @@ class RebatePeriodRun(Document):
 					"in un Settlement."
 				)
 			)
+		self._reverse_accrual()
+
+	def _reverse_accrual(self) -> None:
+		if not self.agreement:
+			return
+		try:
+			policy_code = frappe.db.get_value(
+				"Rebate Agreement", self.agreement, "accounting_policy"
+			)
+		except Exception:
+			return
+		if not policy_code:
+			return
+		from off_invoice_rebates import accounting  # noqa: F401
+		from off_invoice_rebates.accounting.base import get_policy
+
+		get_policy(policy_code).reverse_accrual(self)
 
 	# ------------------------------------------------------------------ helpers
 

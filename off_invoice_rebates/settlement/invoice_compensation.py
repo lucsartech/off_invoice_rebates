@@ -98,3 +98,48 @@ def apply_pending_compensations_on_sales_invoice(doc, method=None) -> None:
 		except Exception:
 			pass
 		frappe.db.set_value("Rebate Settlement", s.name, "status", "posted")
+
+
+def revert_compensation_on_invoice_cancel(doc, method=None) -> None:
+	"""``doc_event`` hook on ``Sales Invoice.on_cancel``.
+
+	When a Sales Invoice that previously consumed pending compensation
+	Settlements is cancelled, flip each linked Settlement back from
+	``posted`` to ``generated`` so it can be re-applied on a future invoice.
+
+	Looks for ``oir_rebate_settlement`` either on the invoice header (set on
+	rebate NCs by the credit_note strategy) or on individual item rows (set
+	by the invoice_compensation hook above). Header tagging is skipped — the
+	header link identifies our own NC, not a consumed compensation.
+	"""
+	if doc.docstatus != 2:  # only act on cancelled docs
+		return
+	if not doc.items:
+		return
+	# A rebate NC has its own header oir_rebate_settlement link — its
+	# settlement is the NC itself, not a compensation it consumed.
+	if getattr(doc, "oir_rebate_settlement", None):
+		return
+
+	settlement_names: set[str] = set()
+	for item in doc.items:
+		s = getattr(item, "oir_rebate_settlement", None)
+		if s:
+			settlement_names.add(s)
+	if not settlement_names:
+		return
+
+	for s_name in settlement_names:
+		try:
+			current_status = frappe.db.get_value(
+				"Rebate Settlement", s_name, "status"
+			)
+			if current_status == "posted":
+				frappe.db.set_value(
+					"Rebate Settlement", s_name, "status", "generated"
+				)
+		except Exception as e:
+			frappe.log_error(
+				f"revert_compensation failed for {s_name}: {e}",
+				"OIR settlement",
+			)

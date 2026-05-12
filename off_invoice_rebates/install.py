@@ -6,6 +6,7 @@ from frappe.modules.import_file import import_file_by_path
 
 def after_install():
 	_sync_workflows()
+	_seed_rebate_item()
 
 
 def after_migrate():
@@ -22,3 +23,29 @@ def _sync_workflows():
 		json_path = os.path.join(workflow_root, entry, f"{entry}.json")
 		if os.path.isfile(json_path):
 			import_file_by_path(json_path, force=True)
+
+
+def _seed_rebate_item():
+	"""Seed the stable ``OIR-Rebate`` Item used by NC / compensation lines.
+
+	Idempotent: skips when the Item already exists. Lives at install-time only
+	so that the runtime ``ensure_rebate_item`` helper in
+	``settlement.credit_note`` remains a safety-net for sites that miss it.
+	"""
+	if frappe.db.exists("Item", "OIR-Rebate"):
+		return
+	group = (
+		frappe.db.get_value("Item Group", {"is_group": 0}, "name")
+		or "All Item Groups"
+	)
+	item = frappe.new_doc("Item")
+	item.item_code = "OIR-Rebate"
+	item.item_name = "Rebate Off-Invoice"
+	item.item_group = group
+	item.is_stock_item = 0
+	item.include_item_in_manufacturing = 0
+	item.description = (
+		"Articolo di servizio per emissione documenti rebate. "
+		"Generato automaticamente da off_invoice_rebates."
+	)
+	item.insert(ignore_permissions=True)
