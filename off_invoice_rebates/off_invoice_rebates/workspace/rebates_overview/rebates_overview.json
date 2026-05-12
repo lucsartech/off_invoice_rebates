@@ -20,7 +20,7 @@
  "idx": 0,
  "indicator_color": "green",
  "is_hidden": 0,
- "label": "Rebates Overview",
+ "label": "Premi Off-Invoice",
  "links": [
   {
    "hidden": 0,
@@ -157,7 +157,7 @@
  "modified": "2026-05-12 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Off-Invoice Rebates",
- "name": "Rebates Overview",
+ "name": "Premi Off-Invoice",
  "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
