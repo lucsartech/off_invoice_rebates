@@ -1,0 +1,243 @@
+{
+ "actions": [],
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "document_type": "System",
+ "engine": "InnoDB",
+ "field_order": [
+  "default_accounts_section",
+  "rebate_expense_account",
+  "rebate_accrued_liability_account",
+  "column_break_accounts",
+  "rebate_payable_account",
+  "naming_series_section",
+  "agreement_naming_series",
+  "period_run_naming_series",
+  "column_break_series",
+  "settlement_naming_series",
+  "nc_rebate_naming_series",
+  "causali_section",
+  "default_causale_nc_premio_in_natura",
+  "default_causale_nc_premio_finanziario",
+  "default_policy_section",
+  "default_settlement_mode",
+  "default_accounting_policy",
+  "column_break_policy",
+  "default_iva_regime",
+  "scheduler_section",
+  "enable_auto_period_run",
+  "auto_run_time",
+  "column_break_scheduler",
+  "auto_run_retry_on_failure"
+ ],
+ "fields": [
+  {
+   "fieldname": "default_accounts_section",
+   "fieldtype": "Section Break",
+   "label": "Conti Contabili di Default"
+  },
+  {
+   "description": "Conto di Conto Economico utilizzato come storno del rateo di competenza al momento della liquidazione.",
+   "fieldname": "rebate_expense_account",
+   "fieldtype": "Link",
+   "label": "Conto Costo Premi Clienti",
+   "options": "Account"
+  },
+  {
+   "description": "Conto di Stato Patrimoniale (passivo) per il rateo di competenza dei premi maturati.",
+   "fieldname": "rebate_accrued_liability_account",
+   "fieldtype": "Link",
+   "label": "Conto Rateo Passivo Premi Clienti",
+   "options": "Account"
+  },
+  {
+   "fieldname": "column_break_accounts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Conto di Stato Patrimoniale (passivo) per i debiti verso clienti per premi liquidati, utilizzato quando distinto dal conto NC.",
+   "fieldname": "rebate_payable_account",
+   "fieldtype": "Link",
+   "label": "Conto Debiti v/Clienti per Premi Liquidati",
+   "options": "Account"
+  },
+  {
+   "fieldname": "naming_series_section",
+   "fieldtype": "Section Break",
+   "label": "Naming Series e Causali"
+  },
+  {
+   "default": "REB-AGR-.YYYY.-.#####",
+   "description": "Pattern di numerazione per gli accordi di premio.",
+   "fieldname": "agreement_naming_series",
+   "fieldtype": "Data",
+   "label": "Naming Series Accordo Premio",
+   "reqd": 1
+  },
+  {
+   "default": "REB-RUN-.YYYY.-.#####",
+   "description": "Pattern di numerazione per i Period Run di accantonamento.",
+   "fieldname": "period_run_naming_series",
+   "fieldtype": "Data",
+   "label": "Naming Series Period Run",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_series",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "REB-SET-.YYYY.-.#####",
+   "description": "Pattern di numerazione per i documenti di liquidazione premio.",
+   "fieldname": "settlement_naming_series",
+   "fieldtype": "Data",
+   "label": "Naming Series Liquidazione Premio",
+   "reqd": 1
+  },
+  {
+   "default": "NC-REB-.YYYY.-.#####",
+   "description": "Pattern di numerazione per le Note di Credito emesse a fronte di premi. ATTENZIONE: deve essere distinta dalla serie delle NC clienti standard per separare i registri IVA.",
+   "fieldname": "nc_rebate_naming_series",
+   "fieldtype": "Data",
+   "label": "Naming Series NC Premio",
+   "reqd": 1
+  },
+  {
+   "fieldname": "causali_section",
+   "fieldtype": "Section Break",
+   "label": "Causali di Default"
+  },
+  {
+   "default": "Premio in natura ex art. 26 DPR 633/72 — riduzione base imponibile",
+   "description": "Causale di default per le NC con IVA che riducono la base imponibile (art. 26 DPR 633/72).",
+   "fieldname": "default_causale_nc_premio_in_natura",
+   "fieldtype": "Small Text",
+   "label": "Causale di Default NC Premio in Natura"
+  },
+  {
+   "default": "Premio finanziario fuori campo IVA art. 15 DPR 633/72",
+   "description": "Causale di default per le NC fuori campo IVA emesse per premi finanziari.",
+   "fieldname": "default_causale_nc_premio_finanziario",
+   "fieldtype": "Small Text",
+   "label": "Causale di Default NC Premio Finanziario"
+  },
+  {
+   "fieldname": "default_policy_section",
+   "fieldtype": "Section Break",
+   "label": "Politiche di Default"
+  },
+  {
+   "default": "credit_note",
+   "description": "Modalità di liquidazione applicata di default ai nuovi Accordi Premio. Override per singolo Accordo.",
+   "fieldname": "default_settlement_mode",
+   "fieldtype": "Select",
+   "label": "Modalità Liquidazione di Default",
+   "options": "credit_note\ninvoice_compensation\npayment_entry",
+   "reqd": 1
+  },
+  {
+   "default": "on_settlement",
+   "description": "Politica contabile applicata di default ai nuovi Accordi Premio. Override per singolo Accordo.",
+   "fieldname": "default_accounting_policy",
+   "fieldtype": "Select",
+   "label": "Politica Contabile di Default",
+   "options": "full_accrual\non_settlement\nmemo_only",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_policy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "in_natura",
+   "description": "Regime IVA applicato di default. 'in_natura' = NC con IVA art. 26 DPR 633/72; 'fuori_campo' = NC fuori campo art. 15 DPR 633/72.",
+   "fieldname": "default_iva_regime",
+   "fieldtype": "Select",
+   "label": "Regime IVA di Default",
+   "options": "in_natura\nfuori_campo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "scheduler_section",
+   "fieldtype": "Section Break",
+   "label": "Scheduler"
+  },
+  {
+   "default": "1",
+   "description": "Se abilitato, il Period Run viene eseguito automaticamente in base alla cadenza degli Accordi Premio.",
+   "fieldname": "enable_auto_period_run",
+   "fieldtype": "Check",
+   "label": "Abilita Period Run Automatico"
+  },
+  {
+   "default": "02:00:00",
+   "depends_on": "eval:doc.enable_auto_period_run",
+   "description": "Ora del giorno in cui lo scheduler verifica e esegue i Period Run dovuti.",
+   "fieldname": "auto_run_time",
+   "fieldtype": "Time",
+   "label": "Ora Esecuzione Giornaliera"
+  },
+  {
+   "fieldname": "column_break_scheduler",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "3",
+   "description": "Numero di tentativi automatici in caso di fallimento del Period Run schedulato (0-10).",
+   "fieldname": "auto_run_retry_on_failure",
+   "fieldtype": "Int",
+   "label": "Tentativi su Fallimento",
+   "non_negative": 1
+  }
+ ],
+ "icon": "fa fa-cog",
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Rebate Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Rebate User",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
