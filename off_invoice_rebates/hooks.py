@@ -159,23 +159,11 @@ after_migrate = "off_invoice_rebates.install.after_migrate"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"off_invoice_rebates.tasks.all"
-# 	],
-# 	"daily": [
-# 		"off_invoice_rebates.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"off_invoice_rebates.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"off_invoice_rebates.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"off_invoice_rebates.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"off_invoice_rebates.rebate_engine.tasks.run_due_periods",
+	],
+}
 
 # Testing
 # -------
