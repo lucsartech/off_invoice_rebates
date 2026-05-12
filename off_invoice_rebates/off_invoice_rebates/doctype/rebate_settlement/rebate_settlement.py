@@ -20,9 +20,23 @@ class RebateSettlement(Document):
 
 	def on_submit(self) -> None:
 		self._update_period_run_settlement_status()
-		self.db_set("status", "generated", update_modified=False)
-		# Actual document generation (NC, Payment Entry, Journal Entry)
-		# is wired by settlement-accounting in F3.
+		self._dispatch_strategy()
+		# Strategy may have flipped status to "posted"; default to "generated"
+		# only when nothing more granular has been written.
+		if not self.get("status") or self.status in ("draft", ""):
+			self.db_set("status", "generated", update_modified=False)
+
+	def _dispatch_strategy(self) -> None:
+		# Importing the package side-effect-registers all built-in strategies.
+		from off_invoice_rebates.settlement import (  # noqa: F401
+			credit_note,
+			invoice_compensation,
+			payment_entry,
+		)
+		from off_invoice_rebates.settlement.base import get_strategy
+
+		strategy = get_strategy(self.settlement_mode)
+		strategy.settle(self)
 
 	def on_cancel(self) -> None:
 		self._restore_period_run_settlement_status()

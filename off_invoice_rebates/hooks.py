@@ -148,13 +148,12 @@ after_migrate = "off_invoice_rebates.install.after_migrate"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Sales Invoice": {
+		"validate": "off_invoice_rebates.settlement.invoice_compensation.apply_pending_compensations_on_sales_invoice",
+		"on_cancel": "off_invoice_rebates.settlement.invoice_compensation.revert_compensation_on_invoice_cancel",
+	},
+}
 
 # Scheduled Tasks
 # ---------------
