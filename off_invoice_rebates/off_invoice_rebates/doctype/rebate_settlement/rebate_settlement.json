@@ -1,0 +1,281 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "agreement",
+  "customer",
+  "settlement_date",
+  "mode_section",
+  "settlement_mode",
+  "accounting_policy",
+  "column_break_mode",
+  "iva_regime",
+  "causale",
+  "period_runs_section",
+  "period_runs",
+  "totals_section",
+  "currency",
+  "total_amount",
+  "documents_section",
+  "sales_invoice_nc",
+  "payment_entry",
+  "column_break_docs",
+  "journal_entry",
+  "status_section",
+  "status",
+  "notes_section",
+  "notes",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "default": "REB-SET-.YYYY.-.#####",
+   "description": "Pattern di numerazione della Liquidazione Premio. Il default viene sovrascritto in fase di creazione dal valore configurato in Rebate Settings (F3).",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Serie Numerazione",
+   "options": "REB-SET-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "description": "Accordo Premio di riferimento. Tutti i Period Run liquidati devono appartenere a questo Accordo.",
+   "fieldname": "agreement",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Accordo Premio",
+   "options": "Rebate Agreement",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "agreement.customer",
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Cliente",
+   "options": "Customer",
+   "read_only": 1
+  },
+  {
+   "default": "Today",
+   "description": "Data di liquidazione. Determina la competenza del documento contabile/finanziario generato.",
+   "fieldname": "settlement_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Data Liquidazione",
+   "reqd": 1
+  },
+  {
+   "fieldname": "mode_section",
+   "fieldtype": "Section Break",
+   "label": "Modalita'"
+  },
+  {
+   "description": "Modalita' di liquidazione del premio. Ereditata dall'Accordo, sovrascrivibile per singola Liquidazione.",
+   "fetch_from": "agreement.settlement_mode",
+   "fieldname": "settlement_mode",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Modalita' Liquidazione",
+   "options": "credit_note\ninvoice_compensation\npayment_entry",
+   "reqd": 1
+  },
+  {
+   "description": "Politica contabile applicata alla Liquidazione. Ereditata dall'Accordo.",
+   "fetch_from": "agreement.accounting_policy",
+   "fieldname": "accounting_policy",
+   "fieldtype": "Select",
+   "label": "Politica Contabile",
+   "options": "full_accrual\non_settlement\nmemo_only",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_mode",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Regime IVA della Liquidazione. Ereditato dall'Accordo. Determina la struttura della NC o della scrittura contabile.",
+   "fetch_from": "agreement.iva_regime",
+   "fieldname": "iva_regime",
+   "fieldtype": "Select",
+   "label": "Regime IVA",
+   "options": "in_natura\nfuori_campo",
+   "reqd": 1
+  },
+  {
+   "description": "Causale per nota di credito o scrittura contabile. Default popolato dal controller a partire da Rebate Settings (F3).",
+   "fieldname": "causale",
+   "fieldtype": "Small Text",
+   "label": "Causale"
+  },
+  {
+   "fieldname": "period_runs_section",
+   "fieldtype": "Section Break",
+   "label": "Period Run Liquidati"
+  },
+  {
+   "description": "Period Run inclusi in questa Liquidazione. Devono appartenere tutti allo stesso Accordo (enforcement controller in F3).",
+   "fieldname": "period_runs",
+   "fieldtype": "Table",
+   "label": "Period Run Liquidati",
+   "options": "Rebate Settlement Period Run",
+   "reqd": 1
+  },
+  {
+   "fieldname": "totals_section",
+   "fieldtype": "Section Break",
+   "label": "Totali"
+  },
+  {
+   "description": "Valuta della Liquidazione, ereditata dall'Accordo.",
+   "fetch_from": "agreement.currency",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Valuta",
+   "options": "Currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "description": "Totale della Liquidazione, sommato dalle righe period_runs.amount_to_settle (F3).",
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Totale Liquidato",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "documents_section",
+   "fieldtype": "Section Break",
+   "label": "Documenti Collegati"
+  },
+  {
+   "description": "Nota di Credito generata dalla strategy 'credit_note' in F3.",
+   "fieldname": "sales_invoice_nc",
+   "fieldtype": "Link",
+   "label": "Nota di Credito",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "description": "Payment Entry generato dalla strategy 'payment_entry' in F3.",
+   "fieldname": "payment_entry",
+   "fieldtype": "Link",
+   "label": "Payment Entry",
+   "options": "Payment Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_docs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Scrittura contabile di compensazione (strategy 'invoice_compensation') o di accrual/storno (policy 'full_accrual') generata in F3/F4.",
+   "fieldname": "journal_entry",
+   "fieldtype": "Link",
+   "label": "Scrittura Contabile",
+   "options": "Journal Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status_section",
+   "fieldtype": "Section Break",
+   "label": "Stato"
+  },
+  {
+   "default": "draft",
+   "description": "Stato della Liquidazione: draft = bozza; generated = documenti collegati creati ma non submitted; posted = documenti collegati submitted e GL postato; cancelled = annullata.",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Stato",
+   "options": "draft\ngenerated\nposted\ncancelled",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "notes_section",
+   "fieldtype": "Section Break",
+   "label": "Note"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Note"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Rettifica Di",
+   "no_copy": 1,
+   "options": "Rebate Settlement",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "icon": "fa fa-money",
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Settlement",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Rebate Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Rebate User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

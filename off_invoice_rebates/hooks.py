@@ -10,6 +10,17 @@ app_license = "gpl-3.0"
 
 required_apps = ["erpnext"]
 
+# Fixtures
+# --------
+# Export with: bench --site <site> export-fixtures --app off_invoice_rebates
+# Filter scopes ONLY app-owned records (oir_* prefix on Custom Fields and Property Setters)
+fixtures = [
+	{
+		"dt": "Custom Field",
+		"filters": [["fieldname", "like", "oir_%"]],
+	},
+]
+
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
 # 	{

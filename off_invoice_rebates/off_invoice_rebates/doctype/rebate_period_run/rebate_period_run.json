@@ -1,0 +1,291 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "agreement",
+  "agreement_title",
+  "customer",
+  "period_section",
+  "period_key",
+  "period_start",
+  "column_break_period",
+  "period_end",
+  "cadence",
+  "compute_section",
+  "compute_status",
+  "compute_started_at",
+  "column_break_compute",
+  "compute_completed_at",
+  "compute_duration_seconds",
+  "failure_reason",
+  "totals_section",
+  "currency",
+  "total_amount",
+  "column_break_totals",
+  "settlement_status",
+  "settled_amount",
+  "accruals_section",
+  "accruals",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "default": "REB-RUN-.YYYY.-.#####",
+   "description": "Pattern di numerazione del Period Run. Il default viene sovrascritto in fase di creazione dal valore configurato in Rebate Settings (F2).",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Serie Numerazione",
+   "options": "REB-RUN-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "description": "Accordo Premio di riferimento. Determina cliente, valuta, condizioni e perimetro applicabili al run.",
+   "fieldname": "agreement",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Accordo Premio",
+   "options": "Rebate Agreement",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "agreement.title",
+   "fieldname": "agreement_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Titolo Accordo",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "agreement.customer",
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Cliente",
+   "options": "Customer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "period_section",
+   "fieldtype": "Section Break",
+   "label": "Periodo"
+  },
+  {
+   "description": "Identificatore univoco del periodo per Accordo, es. `2026-Q1` o `2026-03`. La combinazione (agreement, period_key) deve essere univoca (enforcement controller in F2).",
+   "fieldname": "period_key",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Chiave Periodo",
+   "reqd": 1
+  },
+  {
+   "description": "Data di inizio del periodo (inclusa).",
+   "fieldname": "period_start",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Inizio Periodo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_period",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Data di fine del periodo (inclusa).",
+   "fieldname": "period_end",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Fine Periodo",
+   "reqd": 1
+  },
+  {
+   "description": "Cadenza del Period Run. Popolata dal controller a partire dalla Rebate Schedule dell'Accordo (F2).",
+   "fieldname": "cadence",
+   "fieldtype": "Select",
+   "label": "Cadenza",
+   "options": "monthly\nquarterly\nannual",
+   "reqd": 1
+  },
+  {
+   "fieldname": "compute_section",
+   "fieldtype": "Section Break",
+   "label": "Calcolo"
+  },
+  {
+   "default": "pending",
+   "description": "Stato del ciclo di calcolo del run: pending = non ancora elaborato; computing = in corso; computed = completato con successo; failed = errore (vedi failure_reason).",
+   "fieldname": "compute_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Stato Calcolo",
+   "options": "pending\ncomputing\ncomputed\nfailed",
+   "read_only": 1
+  },
+  {
+   "description": "Timestamp di inizio dell'ultima esecuzione del calcolo.",
+   "fieldname": "compute_started_at",
+   "fieldtype": "Datetime",
+   "label": "Inizio Calcolo",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_compute",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Timestamp di completamento dell'ultima esecuzione del calcolo.",
+   "fieldname": "compute_completed_at",
+   "fieldtype": "Datetime",
+   "label": "Fine Calcolo",
+   "read_only": 1
+  },
+  {
+   "description": "Durata in secondi dell'ultima esecuzione del calcolo.",
+   "fieldname": "compute_duration_seconds",
+   "fieldtype": "Float",
+   "label": "Durata Calcolo (s)",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.compute_status==\"failed\"",
+   "description": "Messaggio di errore dell'ultima esecuzione, valorizzato solo quando compute_status = failed.",
+   "fieldname": "failure_reason",
+   "fieldtype": "Long Text",
+   "label": "Dettaglio Errore",
+   "read_only": 1
+  },
+  {
+   "fieldname": "totals_section",
+   "fieldtype": "Section Break",
+   "label": "Totali"
+  },
+  {
+   "description": "Valuta del run, ereditata dall'Accordo.",
+   "fetch_from": "agreement.currency",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Valuta",
+   "options": "Currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "description": "Totale del premio maturato nel periodo, sommato dalle righe Rebate Accrual Entry (F2).",
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Totale Maturato",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_totals",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "unsettled",
+   "description": "Stato di liquidazione del run: unsettled = nessun Settlement; partial = liquidato parzialmente; settled = interamente liquidato. Aggiornato dal controller del Rebate Settlement (F3).",
+   "fieldname": "settlement_status",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Stato Liquidazione",
+   "options": "unsettled\npartial\nsettled",
+   "read_only": 1
+  },
+  {
+   "description": "Totale gia' liquidato per questo run, sommato dai Rebate Settlement Period Run collegati (F3).",
+   "fieldname": "settled_amount",
+   "fieldtype": "Currency",
+   "label": "Totale Liquidato",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accruals_section",
+   "fieldtype": "Section Break",
+   "label": "Accruals"
+  },
+  {
+   "description": "Righe di maturato prodotte dai calculator dell'Accordo. Una riga per ciascuna Rebate Condition applicata. Bloccate dopo Submit (enforcement controller in F2).",
+   "fieldname": "accruals",
+   "fieldtype": "Table",
+   "label": "Righe di Maturato",
+   "options": "Rebate Accrual Entry"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Rettifica Di",
+   "no_copy": 1,
+   "options": "Rebate Period Run",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "icon": "fa fa-calculator",
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Period Run",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Rebate Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Rebate User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

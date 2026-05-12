@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "calculator_code",
+  "condition_description",
+  "amount",
+  "breakdown"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "description": "Codice del calcolatore che ha prodotto questa riga di maturato.",
+   "fieldname": "calculator_code",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Calcolatore",
+   "options": "turnover_tiered\nvolume\ntarget_growth\nflat_contribution",
+   "reqd": 1
+  },
+  {
+   "columns": 4,
+   "description": "Descrizione della Rebate Condition originaria, copiata al momento del calcolo per tracciabilita'.",
+   "fieldname": "condition_description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Descrizione Condizione"
+  },
+  {
+   "columns": 2,
+   "description": "Importo maturato per questa condizione nel periodo del run. La valuta e' quella del Period Run padre.",
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Importo",
+   "options": "currency",
+   "reqd": 1
+  },
+  {
+   "description": "JSON con i dettagli del calcolo per spiegabilita' - popolato dal calculator in F2.",
+   "fieldname": "breakdown",
+   "fieldtype": "Long Text",
+   "label": "Dettaglio Calcolo"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Accrual Entry",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

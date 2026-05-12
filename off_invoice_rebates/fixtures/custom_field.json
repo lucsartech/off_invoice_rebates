@@ -1,0 +1,17 @@
+[
+ {
+  "doctype": "Custom Field",
+  "name": "Sales Invoice-oir_rebate_settlement",
+  "dt": "Sales Invoice",
+  "fieldname": "oir_rebate_settlement",
+  "label": "Rebate Settlement",
+  "fieldtype": "Link",
+  "options": "Rebate Settlement",
+  "insert_after": "naming_series",
+  "read_only": 1,
+  "in_standard_filter": 1,
+  "no_copy": 1,
+  "print_hide": 1,
+  "module": "Off-Invoice Rebates"
+ }
+]

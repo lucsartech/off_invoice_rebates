@@ -1,0 +1,78 @@
+{
+ "actions": [],
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "period_run",
+  "period_key",
+  "period_total_amount",
+  "period_already_settled",
+  "amount_to_settle"
+ ],
+ "fields": [
+  {
+   "columns": 3,
+   "description": "Period Run liquidato in questa Liquidazione. Deve appartenere allo stesso Accordo della parent.",
+   "fieldname": "period_run",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Period Run",
+   "options": "Rebate Period Run",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fetch_from": "period_run.period_key",
+   "fieldname": "period_key",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Chiave Periodo",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "description": "Totale maturato del Period Run, ereditato per visibilita'.",
+   "fetch_from": "period_run.total_amount",
+   "fieldname": "period_total_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Totale Maturato",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "description": "Quota del Period Run gia' liquidata in altre Liquidazioni submitted. Calcolato dal controller in F3.",
+   "fieldname": "period_already_settled",
+   "fieldtype": "Currency",
+   "label": "Gia' Liquidato",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "description": "Quota del Period Run liquidata in questa Liquidazione. Deve essere <= (period_total_amount - period_already_settled).",
+   "fieldname": "amount_to_settle",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Importo Liquidato",
+   "options": "currency",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Settlement Period Run",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
