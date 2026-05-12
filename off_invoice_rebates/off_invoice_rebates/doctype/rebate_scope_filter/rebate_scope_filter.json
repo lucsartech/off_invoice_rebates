@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "dimension",
+  "item_group",
+  "brand",
+  "territory",
+  "customer_group",
+  "include_descendants"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "description": "Dimensione anagrafica su cui filtrare il perimetro delle transazioni considerate.",
+   "fieldname": "dimension",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Dimensione",
+   "options": "item_group\nbrand\nterritory\ncustomer_group",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.dimension=='item_group'",
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "label": "Gruppo Articolo",
+   "mandatory_depends_on": "eval:doc.dimension=='item_group'",
+   "options": "Item Group"
+  },
+  {
+   "depends_on": "eval:doc.dimension=='brand'",
+   "fieldname": "brand",
+   "fieldtype": "Link",
+   "label": "Marchio",
+   "mandatory_depends_on": "eval:doc.dimension=='brand'",
+   "options": "Brand"
+  },
+  {
+   "depends_on": "eval:doc.dimension=='territory'",
+   "fieldname": "territory",
+   "fieldtype": "Link",
+   "label": "Territorio",
+   "mandatory_depends_on": "eval:doc.dimension=='territory'",
+   "options": "Territory"
+  },
+  {
+   "depends_on": "eval:doc.dimension=='customer_group'",
+   "fieldname": "customer_group",
+   "fieldtype": "Link",
+   "label": "Gruppo Cliente",
+   "mandatory_depends_on": "eval:doc.dimension=='customer_group'",
+   "options": "Customer Group"
+  },
+  {
+   "default": "1",
+   "description": "Se la dimensione e' tree-like (Gruppo Articolo, Territorio, Gruppo Cliente) include anche i discendenti del nodo selezionato. Ignorato per dimensioni non gerarchiche (Marchio).",
+   "fieldname": "include_descendants",
+   "fieldtype": "Check",
+   "label": "Includi Discendenti"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Scope Filter",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

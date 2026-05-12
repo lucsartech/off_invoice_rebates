@@ -1,0 +1,53 @@
+{
+ "actions": [],
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "from_amount",
+  "to_amount",
+  "percentage"
+ ],
+ "fields": [
+  {
+   "columns": 3,
+   "description": "Soglia minima inclusiva dello scaglione.",
+   "fieldname": "from_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Da Importo",
+   "reqd": 1
+  },
+  {
+   "columns": 3,
+   "description": "Soglia massima esclusiva dello scaglione. Lasciare vuoto per indicare nessun limite superiore (+∞).",
+   "fieldname": "to_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "A Importo"
+  },
+  {
+   "columns": 2,
+   "description": "Percentuale di rebate riconosciuta in questo scaglione.",
+   "fieldname": "percentage",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Percentuale",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Tier",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

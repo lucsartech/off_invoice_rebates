@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "cadence",
+  "anchor_date",
+  "next_run_date"
+ ],
+ "fields": [
+  {
+   "columns": 3,
+   "default": "monthly",
+   "description": "Cadenza con cui viene generato il Period Run per questo Accordo.",
+   "fieldname": "cadence",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Cadenza",
+   "options": "monthly\nquarterly\nannual",
+   "reqd": 1
+  },
+  {
+   "columns": 3,
+   "description": "Data di ancoraggio dalla quale partono i periodi (di norma coincide con la data di inizio dell'Accordo).",
+   "fieldname": "anchor_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Data di Ancoraggio",
+   "reqd": 1
+  },
+  {
+   "columns": 3,
+   "description": "Data del prossimo Period Run da eseguire. Aggiornata automaticamente dallo scheduler dopo ogni esecuzione.",
+   "fieldname": "next_run_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Prossima Esecuzione",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Schedule",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

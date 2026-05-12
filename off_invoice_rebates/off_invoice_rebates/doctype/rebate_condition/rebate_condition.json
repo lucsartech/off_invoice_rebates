@@ -1,0 +1,183 @@
+{
+ "actions": [],
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "calculator_code",
+  "description",
+  "turnover_tiered_section",
+  "tier_metric",
+  "tiers",
+  "volume_section",
+  "volume_unit_amount",
+  "volume_unit_of_measure",
+  "target_growth_section",
+  "target_metric",
+  "target_amount",
+  "column_break_target",
+  "growth_baseline_months",
+  "growth_threshold_percent",
+  "growth_premium_percent",
+  "flat_contribution_section",
+  "flat_amount",
+  "flat_periodicity"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "description": "Codice del calcolatore da applicare. Determina quali campi specifici sono richiesti.",
+   "fieldname": "calculator_code",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Calcolatore",
+   "options": "turnover_tiered\nvolume\ntarget_growth\nflat_contribution",
+   "reqd": 1
+  },
+  {
+   "columns": 4,
+   "description": "Etichetta libera per identificare questa condizione all'interno dell'Accordo.",
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Descrizione"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='turnover_tiered'",
+   "fieldname": "turnover_tiered_section",
+   "fieldtype": "Section Break",
+   "label": "Scaglioni di Fatturato"
+  },
+  {
+   "default": "turnover",
+   "depends_on": "eval:doc.calculator_code=='turnover_tiered'",
+   "description": "Metrica di riferimento per gli scaglioni: fatturato (importo) o quantità venduta.",
+   "fieldname": "tier_metric",
+   "fieldtype": "Select",
+   "label": "Metrica Scaglioni",
+   "mandatory_depends_on": "eval:doc.calculator_code=='turnover_tiered'",
+   "options": "turnover\nquantity"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='turnover_tiered'",
+   "description": "Definizione degli scaglioni e delle relative percentuali di rebate.",
+   "fieldname": "tiers",
+   "fieldtype": "Table",
+   "label": "Scaglioni",
+   "mandatory_depends_on": "eval:doc.calculator_code=='turnover_tiered'",
+   "options": "Rebate Tier"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='volume'",
+   "fieldname": "volume_section",
+   "fieldtype": "Section Break",
+   "label": "Volume"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='volume'",
+   "description": "Importo riconosciuto per unità di misura venduta.",
+   "fieldname": "volume_unit_amount",
+   "fieldtype": "Currency",
+   "label": "Importo per Unità",
+   "mandatory_depends_on": "eval:doc.calculator_code=='volume'"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='volume'",
+   "description": "Unità di misura su cui calcolare il rebate volumetrico.",
+   "fieldname": "volume_unit_of_measure",
+   "fieldtype": "Link",
+   "label": "Unità di Misura",
+   "mandatory_depends_on": "eval:doc.calculator_code=='volume'",
+   "options": "UOM"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='target_growth'",
+   "fieldname": "target_growth_section",
+   "fieldtype": "Section Break",
+   "label": "Target e Crescita"
+  },
+  {
+   "default": "turnover",
+   "depends_on": "eval:doc.calculator_code=='target_growth'",
+   "description": "Metrica di riferimento per target e crescita: fatturato o quantità.",
+   "fieldname": "target_metric",
+   "fieldtype": "Select",
+   "label": "Metrica Target",
+   "mandatory_depends_on": "eval:doc.calculator_code=='target_growth'",
+   "options": "turnover\nquantity"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='target_growth'",
+   "description": "Target assoluto da raggiungere nel periodo. Alternativo al confronto con baseline storica.",
+   "fieldname": "target_amount",
+   "fieldtype": "Currency",
+   "label": "Target Assoluto"
+  },
+  {
+   "fieldname": "column_break_target",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "12",
+   "depends_on": "eval:doc.calculator_code=='target_growth'",
+   "description": "Offset in mesi del periodo di confronto per il calcolo della crescita (es. 12 = YoY).",
+   "fieldname": "growth_baseline_months",
+   "fieldtype": "Int",
+   "label": "Mesi Baseline Crescita"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.calculator_code=='target_growth'",
+   "description": "Crescita percentuale minima rispetto al baseline per far scattare il premio.",
+   "fieldname": "growth_threshold_percent",
+   "fieldtype": "Percent",
+   "label": "Soglia Crescita %"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='target_growth'",
+   "description": "Percentuale di premio riconosciuta sulla porzione che eccede la soglia di crescita.",
+   "fieldname": "growth_premium_percent",
+   "fieldtype": "Percent",
+   "label": "Premio Crescita %",
+   "mandatory_depends_on": "eval:doc.calculator_code=='target_growth'"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='flat_contribution'",
+   "fieldname": "flat_contribution_section",
+   "fieldtype": "Section Break",
+   "label": "Forfettario"
+  },
+  {
+   "depends_on": "eval:doc.calculator_code=='flat_contribution'",
+   "description": "Importo forfettario riconosciuto per periodo.",
+   "fieldname": "flat_amount",
+   "fieldtype": "Currency",
+   "label": "Importo Forfettario",
+   "mandatory_depends_on": "eval:doc.calculator_code=='flat_contribution'"
+  },
+  {
+   "default": "annual",
+   "depends_on": "eval:doc.calculator_code=='flat_contribution'",
+   "description": "Periodicità con cui matura l'importo forfettario.",
+   "fieldname": "flat_periodicity",
+   "fieldtype": "Select",
+   "label": "Periodicità",
+   "mandatory_depends_on": "eval:doc.calculator_code=='flat_contribution'",
+   "options": "monthly\nquarterly\nannual"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Condition",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
