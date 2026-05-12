@@ -76,14 +76,15 @@ class RebateAgreement(Document):
 			)
 
 		if code == "turnover_tiered":
-			if not c.tiers:
+			tiers = self._resolve_tiers(c)
+			if not tiers:
 				frappe.throw(
 					_(
 						"Riga {0}: la condizione 'Scaglioni di Fatturato' richiede almeno "
 						"una riga di scaglione."
 					).format(c.idx)
 				)
-			self._validate_tiers_monotonic(c)
+			self._validate_tiers_monotonic(c, tiers)
 		elif code == "volume":
 			if not flt(c.volume_unit_amount) or not c.volume_unit_of_measure:
 				frappe.throw(
@@ -106,15 +107,34 @@ class RebateAgreement(Document):
 					).format(c.idx)
 				)
 
-	def _validate_tiers_monotonic(self, condition) -> None:
-		tiers = sorted(condition.tiers, key=lambda t: flt(t.from_amount))
+	def _resolve_tiers(self, condition) -> list:
+		"""Return tiers either from the in-memory child table or from DB.
+		Tiers are grandchildren (Rebate Agreement → Rebate Condition → Rebate Tier),
+		and Frappe does NOT auto-load grandchildren on parent reload — so callers
+		that re-validate after persistence need this DB fallback."""
+		in_memory = list(condition.get("tiers") or [])
+		if in_memory:
+			return in_memory
+		if not getattr(condition, "name", None):
+			return []
+		return frappe.get_all(
+			"Rebate Tier",
+			filters={"parent": condition.name, "parenttype": "Rebate Condition"},
+			fields=["from_amount", "to_amount", "percentage", "idx"],
+			order_by="idx asc",
+		)
+
+	def _validate_tiers_monotonic(self, condition, tiers=None) -> None:
+		tiers = tiers if tiers is not None else self._resolve_tiers(condition)
+		tiers = sorted(tiers, key=lambda t: flt(t.get("from_amount") if isinstance(t, dict) else t.from_amount))
 		prev_to: float | None = None
-		for t in tiers:
-			from_amt = flt(t.from_amount)
-			to_amt = flt(t.to_amount) if t.to_amount is not None else None
+		for idx, t in enumerate(tiers, start=1):
+			from_amt = flt(t.get("from_amount") if isinstance(t, dict) else t.from_amount)
+			raw_to = t.get("to_amount") if isinstance(t, dict) else t.to_amount
+			to_amt = flt(raw_to) if raw_to is not None else None
 			if to_amt is not None and to_amt and to_amt <= from_amt:
 				frappe.throw(
-					_("Scaglione {0}: 'A Importo' deve essere maggiore di 'Da Importo'.").format(t.idx)
+					_("Scaglione {0}: 'A Importo' deve essere maggiore di 'Da Importo'.").format(idx)
 				)
 			if prev_to is not None and from_amt and from_amt < prev_to:
 				frappe.throw(

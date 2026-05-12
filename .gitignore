@@ -34,3 +34,4 @@ htmlcov/
 # Local env
 .env
 .env.local
+_demo/
