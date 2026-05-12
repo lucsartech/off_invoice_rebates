@@ -82,8 +82,8 @@ required_apps = ["erpnext"]
 # Installation
 # ------------
 
-# before_install = "off_invoice_rebates.install.before_install"
-# after_install = "off_invoice_rebates.install.after_install"
+after_install = "off_invoice_rebates.install.after_install"
+after_migrate = "off_invoice_rebates.install.after_migrate"
 
 # Uninstallation
 # ------------

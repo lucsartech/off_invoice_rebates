@@ -1,0 +1,326 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-05-12 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "identification_section",
+  "naming_series",
+  "customer",
+  "customer_name",
+  "column_break_identification",
+  "title",
+  "amended_from",
+  "period_section",
+  "start_date",
+  "end_date",
+  "column_break_period",
+  "currency",
+  "policy_section",
+  "settlement_mode",
+  "accounting_policy",
+  "column_break_policy",
+  "iva_regime",
+  "accounts_section",
+  "rebate_expense_account",
+  "rebate_accrued_liability_account",
+  "column_break_accounts",
+  "rebate_payable_account",
+  "conditions_section",
+  "conditions",
+  "scope_section",
+  "scope_filters",
+  "schedule_section",
+  "schedules",
+  "notes_section",
+  "notes",
+  "workflow_section",
+  "workflow_state"
+ ],
+ "fields": [
+  {
+   "fieldname": "identification_section",
+   "fieldtype": "Section Break",
+   "label": "Identificazione"
+  },
+  {
+   "default": "REB-AGR-.YYYY.-.#####",
+   "description": "Pattern di numerazione dell'Accordo Premio. Il default viene sovrascritto in fase di creazione dal valore configurato in Rebate Settings (F2).",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Serie Numerazione",
+   "options": "REB-AGR-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "description": "Cliente beneficiario del premio.",
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Cliente",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Ragione Sociale Cliente",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_identification",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Descrizione libera dell'Accordo. Se vuota viene generata automaticamente in F2 dal controller.",
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Titolo"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Rettifica Di",
+   "no_copy": 1,
+   "options": "Rebate Agreement",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "period_section",
+   "fieldtype": "Section Break",
+   "label": "Periodo e Valuta"
+  },
+  {
+   "description": "Data di inizio validita' dell'Accordo. I Period Run considerano solo transazioni con data compresa nell'intervallo.",
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Data Inizio",
+   "reqd": 1
+  },
+  {
+   "description": "Data di fine validita' dell'Accordo. Allo scadere lo scheduler porta lo stato a Expired.",
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Data Fine",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_period",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Valuta dell'Accordo. Default ereditato dal Cliente; tutti gli importi maturati e liquidati useranno questa valuta.",
+   "fetch_from": "customer.default_currency",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Valuta",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "policy_section",
+   "fieldtype": "Section Break",
+   "label": "Politiche"
+  },
+  {
+   "default": "credit_note",
+   "description": "Modalita' di liquidazione del premio. Default sovrascritto dal valore di Rebate Settings in F2.",
+   "fieldname": "settlement_mode",
+   "fieldtype": "Select",
+   "label": "Modalita' Liquidazione",
+   "options": "credit_note\ninvoice_compensation\npayment_entry",
+   "reqd": 1
+  },
+  {
+   "default": "on_settlement",
+   "description": "Politica contabile applicata al premio: full_accrual = rateo per competenza; on_settlement = registrazione solo a liquidazione; memo_only = solo informativo, nessuna scrittura GL.",
+   "fieldname": "accounting_policy",
+   "fieldtype": "Select",
+   "label": "Politica Contabile",
+   "options": "full_accrual\non_settlement\nmemo_only",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_policy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "in_natura",
+   "description": "Regime IVA del premio. in_natura = NC con IVA art. 26 DPR 633/72 (riduzione base imponibile); fuori_campo = NC fuori campo art. 15 DPR 633/72 (premio finanziario).",
+   "fieldname": "iva_regime",
+   "fieldtype": "Select",
+   "label": "Regime IVA",
+   "options": "in_natura\nfuori_campo",
+   "reqd": 1
+  },
+  {
+   "collapsible": 1,
+   "description": "Lasciare vuoto per usare i default di Rebate Settings.",
+   "fieldname": "accounts_section",
+   "fieldtype": "Section Break",
+   "label": "Conti Contabili (override)"
+  },
+  {
+   "description": "Override per questo Accordo del conto P&L 'Costo Premi Clienti'.",
+   "fieldname": "rebate_expense_account",
+   "fieldtype": "Link",
+   "label": "Conto Costo Premi Clienti",
+   "options": "Account"
+  },
+  {
+   "description": "Override per questo Accordo del conto SP 'Rateo Passivo Premi Clienti'.",
+   "fieldname": "rebate_accrued_liability_account",
+   "fieldtype": "Link",
+   "label": "Conto Rateo Passivo Premi Clienti",
+   "options": "Account"
+  },
+  {
+   "fieldname": "column_break_accounts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Override per questo Accordo del conto SP 'Debiti v/Clienti per Premi Liquidati'.",
+   "fieldname": "rebate_payable_account",
+   "fieldtype": "Link",
+   "label": "Conto Debiti v/Clienti per Premi Liquidati",
+   "options": "Account"
+  },
+  {
+   "description": "Almeno una condizione di calcolo e' obbligatoria. Piu' condizioni concorrono al maturato del periodo.",
+   "fieldname": "conditions_section",
+   "fieldtype": "Section Break",
+   "label": "Condizioni"
+  },
+  {
+   "fieldname": "conditions",
+   "fieldtype": "Table",
+   "label": "Condizioni di Calcolo",
+   "options": "Rebate Condition",
+   "reqd": 1
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval:!doc.scope_filters || doc.scope_filters.length===0",
+   "description": "Lasciare vuoto per applicare le condizioni a tutte le transazioni del cliente.",
+   "fieldname": "scope_section",
+   "fieldtype": "Section Break",
+   "label": "Perimetro"
+  },
+  {
+   "fieldname": "scope_filters",
+   "fieldtype": "Table",
+   "label": "Filtri di Perimetro",
+   "options": "Rebate Scope Filter"
+  },
+  {
+   "description": "Esattamente una cadenza per Accordo. Il sistema rifiuta piu' righe (enforcement in F2).",
+   "fieldname": "schedule_section",
+   "fieldtype": "Section Break",
+   "label": "Cadenza"
+  },
+  {
+   "fieldname": "schedules",
+   "fieldtype": "Table",
+   "label": "Cadenza Period Run",
+   "options": "Rebate Schedule",
+   "reqd": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "notes_section",
+   "fieldtype": "Section Break",
+   "label": "Note"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Note"
+  },
+  {
+   "fieldname": "workflow_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Workflow"
+  },
+  {
+   "description": "Stato del workflow 'Rebate Agreement Workflow'. Gestito automaticamente da Frappe Workflow.",
+   "fieldname": "workflow_state",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Stato",
+   "no_copy": 1,
+   "options": "Workflow State",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "icon": "fa fa-handshake-o",
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebate Agreement",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Rebate Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Rebate User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts User",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}
