@@ -1,0 +1,200 @@
+{
+ "charts": [
+  {
+   "chart_name": "Rebate Maturato Trend",
+   "label": "Andamento Maturato"
+  },
+  {
+   "chart_name": "Rebate Top Customers",
+   "label": "Top Clienti per Maturato"
+  }
+ ],
+ "content": "[{\"id\":\"oirHdrShortcuts\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Scorciatoie</b></span>\",\"col\":12}},{\"id\":\"oirSc1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accordi Premio\",\"col\":3}},{\"id\":\"oirSc2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Period Run\",\"col\":3}},{\"id\":\"oirSc3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Liquidazioni\",\"col\":3}},{\"id\":\"oirSc4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Impostazioni Premi\",\"col\":3}},{\"id\":\"oirSpacer1\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"oirChartTrend\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Rebate Maturato Trend\",\"col\":12}},{\"id\":\"oirChartTop\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Rebate Top Customers\",\"col\":12}},{\"id\":\"oirSpacer2\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"oirHdrReports\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Report</b></span>\",\"col\":12}},{\"id\":\"oirCard1\",\"type\":\"card\",\"data\":{\"card_name\":\"Analisi Maturato\",\"col\":4}},{\"id\":\"oirCard2\",\"type\":\"card\",\"data\":{\"card_name\":\"Liquidazione\",\"col\":4}},{\"id\":\"oirCard3\",\"type\":\"card\",\"data\":{\"card_name\":\"Contabilita'\",\"col\":4}},{\"id\":\"oirCard4\",\"type\":\"card\",\"data\":{\"card_name\":\"Anagrafiche\",\"col\":4}}]",
+ "creation": "2026-05-12 00:00:00.000000",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "accounting",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Rebates Overview",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Analisi Maturato",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "Rebate Period Run",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Maturato per Cliente",
+   "link_count": 0,
+   "link_to": "Rebate Maturato per Cliente",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Rebate Agreement",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Confronto Maturato vs Target",
+   "link_count": 0,
+   "link_to": "Rebate Confronto Maturato vs Target",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Rebate Accrual Entry",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Premi per Gruppo",
+   "link_count": 0,
+   "link_to": "Rebate Premi per Gruppo",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Liquidazione",
+   "link_count": 1,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "Rebate Settlement",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Liquidazioni in Corso",
+   "link_count": 0,
+   "link_to": "Rebate Liquidazioni in Corso",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contabilita'",
+   "link_count": 1,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "Rebate Settlement",
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Riconciliazione Contabile",
+   "link_count": 0,
+   "link_to": "Rebate Riconciliazione Contabile",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Anagrafiche",
+   "link_count": 4,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Accordo Premio",
+   "link_count": 0,
+   "link_to": "Rebate Agreement",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Rebate Agreement",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Period Run",
+   "link_count": 0,
+   "link_to": "Rebate Period Run",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "Rebate Agreement",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Liquidazione Premio",
+   "link_count": 0,
+   "link_to": "Rebate Settlement",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Impostazioni Premi",
+   "link_count": 0,
+   "link_to": "Rebate Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-05-12 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Off-Invoice Rebates",
+ "name": "Rebates Overview",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [],
+ "sequence_id": 50.0,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Accordi Premio",
+   "link_to": "Rebate Agreement",
+   "type": "DocType"
+  },
+  {
+   "color": "Yellow",
+   "doc_view": "List",
+   "label": "Period Run",
+   "link_to": "Rebate Period Run",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Liquidazioni",
+   "link_to": "Rebate Settlement",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "label": "Impostazioni Premi",
+   "link_to": "Rebate Settings",
+   "type": "DocType"
+  }
+ ],
+ "title": "Premi Off-Invoice"
+}
