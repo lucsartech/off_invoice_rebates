@@ -77,6 +77,7 @@ def apply_pending_compensations_on_sales_invoice(doc, method=None) -> None:
 		return
 
 	item_code = ensure_rebate_item()
+	item = frappe.get_cached_doc("Item", item_code)
 	for s in pending:
 		if s.currency and doc.currency and s.currency != doc.currency:
 			# Currency mismatch: defer to F4 / manual handling.
@@ -85,19 +86,32 @@ def apply_pending_compensations_on_sales_invoice(doc, method=None) -> None:
 			"items",
 			{
 				"item_code": item_code,
-				"qty": 1,
-				"rate": -float(s.total_amount),
+				"item_name": item.item_name,
 				"description": s.causale
 				or _("Compensazione Premio {0}").format(s.name),
+				"uom": item.stock_uom or "Nos",
+				"stock_uom": item.stock_uom or "Nos",
+				"conversion_factor": 1,
+				"qty": 1,
+				"rate": -float(s.total_amount),
+				"income_account": _resolve_rebate_income_account(doc.company),
 			},
 		)
-		# Tag the line with the settlement link (Custom Field on Sales Invoice
-		# Item — may not exist yet in F3; tolerate absence).
 		try:
 			line.oir_rebate_settlement = s.name
 		except Exception:
 			pass
 		frappe.db.set_value("Rebate Settlement", s.name, "status", "posted")
+
+
+def _resolve_rebate_income_account(company: str) -> str | None:
+	"""Pick a reasonable income account for the rebate compensation line.
+	Prefer the rebate_expense_account from Settings (mirrors the cost of the
+	rebate); fall back to Company.default_income_account."""
+	settings = frappe.get_cached_doc("Rebate Settings")
+	if settings.rebate_expense_account:
+		return settings.rebate_expense_account
+	return frappe.db.get_value("Company", company, "default_income_account")
 
 
 def revert_compensation_on_invoice_cancel(doc, method=None) -> None:
