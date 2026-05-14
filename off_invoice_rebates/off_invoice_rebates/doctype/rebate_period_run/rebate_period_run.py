@@ -19,9 +19,9 @@ class RebatePeriodRun(Document):
 	def before_submit(self) -> None:
 		if self.compute_status != "computed":
 			frappe.throw(
-				_(
-					"Period Run sottomettibile solo con compute_status='computed'. " "Stato attuale: {0}"
-				).format(self.compute_status or "—")
+				_("Period Run sottomettibile solo con compute_status='computed'. Stato attuale: {0}").format(
+					self.compute_status or "—"
+				)
 			)
 
 	def on_submit(self) -> None:
@@ -59,7 +59,7 @@ class RebatePeriodRun(Document):
 		)
 		if linked:
 			frappe.throw(
-				_("Impossibile cancellare: questo Period Run è già stato liquidato " "in un Settlement.")
+				_("Impossibile cancellare: questo Period Run è già stato liquidato in un Settlement.")
 			)
 		self._reverse_accrual()
 

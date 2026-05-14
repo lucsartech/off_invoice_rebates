@@ -61,10 +61,10 @@ def build_scope_sql(scope_filters: list[dict]) -> tuple[str, dict]:
 
 def _sql_column_for_dim(dim: str) -> str:
 	mapping = {
-		"item_group": ("(SELECT item.item_group FROM `tabItem` item " "WHERE item.name = sii.item_code)"),
-		"brand": ("(SELECT item.brand FROM `tabItem` item " "WHERE item.name = sii.item_code)"),
+		"item_group": ("(SELECT item.item_group FROM `tabItem` item WHERE item.name = sii.item_code)"),
+		"brand": ("(SELECT item.brand FROM `tabItem` item WHERE item.name = sii.item_code)"),
 		"territory": "si.territory",
-		"customer_group": ("(SELECT c.customer_group FROM `tabCustomer` c " "WHERE c.name = si.customer)"),
+		"customer_group": ("(SELECT c.customer_group FROM `tabCustomer` c WHERE c.name = si.customer)"),
 	}
 	if dim not in mapping:
 		raise ValueError(f"Dimensione di perimetro non gestita: {dim}")

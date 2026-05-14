@@ -167,7 +167,7 @@ scheduler_events = {
 # Testing
 # -------
 
-# before_tests = "off_invoice_rebates.install.before_tests"
+before_tests = "off_invoice_rebates.install.before_tests"
 
 # Overriding Methods
 # ------------------------------

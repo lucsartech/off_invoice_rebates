@@ -540,21 +540,21 @@ def force_set_oir_today(date_str: str) -> None:
 
 
 __all__: Iterable[str] = (
-	"DEFAULT_CURRENCY",
 	"DEFAULT_COMPANY",
 	"DEFAULT_COMPANY_ABBR",
+	"DEFAULT_CURRENCY",
 	"DEFAULT_CUSTOMER",
 	"DEFAULT_ITEM",
 	"DEFAULT_UOM",
+	"force_set_oir_today",
+	"get_gl_balance",
+	"make_agreement",
 	"make_company",
 	"make_customer",
 	"make_item",
-	"make_uom",
-	"make_rebate_settings_defaults",
-	"make_agreement",
-	"make_sales_invoice",
 	"make_period_run",
+	"make_rebate_settings_defaults",
+	"make_sales_invoice",
 	"make_settlement",
-	"get_gl_balance",
-	"force_set_oir_today",
+	"make_uom",
 )

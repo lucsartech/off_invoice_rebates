@@ -13,6 +13,20 @@ def after_migrate():
 	_sync_workflows()
 
 
+def before_tests():
+	"""Seed the standard ERPNext test environment before our test suite runs.
+
+	`bench run-tests --app off_invoice_rebates` invokes OUR `before_tests`, not
+	ERPNext's. Without this, a fresh CI site has no Company / Warehouse Type /
+	Item Group / Fiscal Year fixtures, and the test factory's `make_company`
+	fails (e.g. `Could not find Warehouse Type: Transit`). Delegating to
+	ERPNext's `before_tests` runs the setup wizard once and seeds everything.
+	"""
+	from erpnext.setup.utils import before_tests as erpnext_before_tests
+
+	erpnext_before_tests()
+
+
 def _sync_workflows():
 	"""Workflow non è in IMPORTABLE_DOCTYPES → bench install/migrate non lo carica:
 	importiamo manualmente i JSON in <module>/workflow/."""
