@@ -39,11 +39,7 @@ def get_company_from_settlement(settlement_doc) -> str:
 
 def get_company_from_agreement(agreement_name: str) -> str:
 	customer = frappe.db.get_value("Rebate Agreement", agreement_name, "customer")
-	cust_company = (
-		frappe.db.get_value("Customer", customer, "represents_company")
-		if customer
-		else None
-	)
+	cust_company = frappe.db.get_value("Customer", customer, "represents_company") if customer else None
 	return (
 		cust_company
 		or frappe.defaults.get_user_default("company")
@@ -73,9 +69,7 @@ def resolve_account(
 
 def _throw_account(field: str) -> None:
 	frappe.throw(
-		_(
-			"Conto contabile {0} non configurato (né su Rebate Agreement né su Rebate Settings)."
-		).format(field)
+		_("Conto contabile {0} non configurato (né su Rebate Agreement né su Rebate Settings).").format(field)
 	)
 
 

@@ -16,7 +16,7 @@ from off_invoice_rebates.rebate_engine.calculators.base import (
 
 @register("volume")
 class VolumeCalculator:
-	"""Premio = Σ qty (per UOM indicata) × importo per unità."""
+	"""Premio = somma qty (per UOM indicata) per importo per unita'."""
 
 	def compute(
 		self,

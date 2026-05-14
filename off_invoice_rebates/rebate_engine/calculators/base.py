@@ -3,9 +3,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from decimal import Decimal
-from typing import Callable, ClassVar, Protocol
+from typing import ClassVar, Protocol
 
 
 @dataclass
@@ -53,9 +54,7 @@ def get_calculator(code: str):
 	if code not in _REGISTRY:
 		from off_invoice_rebates.rebate_engine.exceptions import UnknownCalculator
 
-		raise UnknownCalculator(
-			f"Nessun calcolatore registrato per il codice: {code}"
-		)
+		raise UnknownCalculator(f"Nessun calcolatore registrato per il codice: {code}")
 	return _REGISTRY[code]()
 
 

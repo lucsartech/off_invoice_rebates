@@ -64,7 +64,7 @@ class TestCreditNoteStrategy(OIRIntegrationTestCase):
 		)
 		run = make_period_run(agreement=ag, anchor_date="2026-03-15")
 		s_name = make_settlement(agreement=ag, period_run=run)
-		from off_invoice_rebates.settlement import credit_note  # noqa: F401
+		from off_invoice_rebates.settlement import credit_note
 		from off_invoice_rebates.settlement.base import get_strategy
 
 		settlement = frappe.get_doc("Rebate Settlement", s_name)

@@ -34,18 +34,11 @@ class TargetGrowthCalculator:
 		scope_params: dict,
 	) -> RebateOutcome:
 		metric = condition.get("target_metric") or "turnover"
-		current = self._fetch_metric(
-			agreement, period.start, period.end, metric, scope_sql, scope_params
-		)
+		current = self._fetch_metric(agreement, period.start, period.end, metric, scope_sql, scope_params)
 
 		target_amount = condition.get("target_amount")
-		premium_pct = (
-			Decimal(str(condition.get("growth_premium_percent") or 0)) / Decimal("100")
-		)
-		threshold_pct = (
-			Decimal(str(condition.get("growth_threshold_percent") or 0))
-			/ Decimal("100")
-		)
+		premium_pct = Decimal(str(condition.get("growth_premium_percent") or 0)) / Decimal("100")
+		threshold_pct = Decimal(str(condition.get("growth_threshold_percent") or 0)) / Decimal("100")
 
 		amount = Decimal("0")
 		breakdown: dict = {
@@ -71,9 +64,7 @@ class TargetGrowthCalculator:
 			months = int(condition.get("growth_baseline_months") or 12)
 			b_start = add_months(period.start, -months)
 			b_end = add_months(period.end, -months)
-			baseline = self._fetch_metric(
-				agreement, b_start, b_end, metric, scope_sql, scope_params
-			)
+			baseline = self._fetch_metric(agreement, b_start, b_end, metric, scope_sql, scope_params)
 			if baseline <= 0:
 				breakdown.update(
 					{

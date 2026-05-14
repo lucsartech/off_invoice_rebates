@@ -83,9 +83,7 @@ class TestBuildScopeSql(unittest.TestCase):
 
 	def test_unknown_dimension_raises(self) -> None:
 		with self.assertRaises(ValueError):
-			self.build_scope_sql(
-				[{"dimension": "color", "color": "red", "include_descendants": 0}]
-			)
+			self.build_scope_sql([{"dimension": "color", "color": "red", "include_descendants": 0}])
 
 	def test_tree_descendants_expansion(self) -> None:
 		"""When include_descendants is set on a tree dimension, the values list

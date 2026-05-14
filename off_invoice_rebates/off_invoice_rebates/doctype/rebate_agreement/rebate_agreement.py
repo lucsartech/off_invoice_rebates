@@ -36,9 +36,7 @@ class RebateAgreement(Document):
 
 	def on_cancel(self) -> None:
 		if frappe.db.exists("Rebate Period Run", {"agreement": self.name, "docstatus": 1}):
-			frappe.throw(
-				_("Impossibile cancellare l'Accordo: esistono Period Run sottomessi.")
-			)
+			frappe.throw(_("Impossibile cancellare l'Accordo: esistono Period Run sottomessi."))
 
 	# ------------------------------------------------------------------ helpers
 
@@ -71,9 +69,7 @@ class RebateAgreement(Document):
 	def _validate_condition_row(self, c) -> None:
 		code = c.calculator_code
 		if not code:
-			frappe.throw(
-				_("Riga {0}: il codice calcolatore è obbligatorio.").format(c.idx)
-			)
+			frappe.throw(_("Riga {0}: il codice calcolatore è obbligatorio.").format(c.idx))
 
 		if code == "turnover_tiered":
 			tiers = self._resolve_tiers(c)
@@ -88,23 +84,19 @@ class RebateAgreement(Document):
 		elif code == "volume":
 			if not flt(c.volume_unit_amount) or not c.volume_unit_of_measure:
 				frappe.throw(
-					_(
-						"Riga {0}: la condizione 'Volume' richiede importo unitario e UOM."
-					).format(c.idx)
+					_("Riga {0}: la condizione 'Volume' richiede importo unitario e UOM.").format(c.idx)
 				)
 		elif code == "target_growth":
 			if not flt(c.growth_premium_percent):
 				frappe.throw(
-					_(
-						"Riga {0}: la condizione 'Target & Crescita' richiede growth_premium_percent."
-					).format(c.idx)
+					_("Riga {0}: la condizione 'Target & Crescita' richiede growth_premium_percent.").format(
+						c.idx
+					)
 				)
 		elif code == "flat_contribution":
 			if not flt(c.flat_amount) or not c.flat_periodicity:
 				frappe.throw(
-					_(
-						"Riga {0}: la condizione 'Forfettario' richiede importo e periodicità."
-					).format(c.idx)
+					_("Riga {0}: la condizione 'Forfettario' richiede importo e periodicità.").format(c.idx)
 				)
 
 	def _resolve_tiers(self, condition) -> list:
@@ -126,7 +118,9 @@ class RebateAgreement(Document):
 
 	def _validate_tiers_monotonic(self, condition, tiers=None) -> None:
 		tiers = tiers if tiers is not None else self._resolve_tiers(condition)
-		tiers = sorted(tiers, key=lambda t: flt(t.get("from_amount") if isinstance(t, dict) else t.from_amount))
+		tiers = sorted(
+			tiers, key=lambda t: flt(t.get("from_amount") if isinstance(t, dict) else t.from_amount)
+		)
 		prev_to: float | None = None
 		for idx, t in enumerate(tiers, start=1):
 			from_amt = flt(t.get("from_amount") if isinstance(t, dict) else t.from_amount)
@@ -137,9 +131,7 @@ class RebateAgreement(Document):
 					_("Scaglione {0}: 'A Importo' deve essere maggiore di 'Da Importo'.").format(idx)
 				)
 			if prev_to is not None and from_amt and from_amt < prev_to:
-				frappe.throw(
-					_("Scaglioni sovrapposti tra le righe — verificare i campi Da/A Importo.")
-				)
+				frappe.throw(_("Scaglioni sovrapposti tra le righe — verificare i campi Da/A Importo."))
 			prev_to = to_amt if to_amt is not None else prev_to
 
 	def _validate_single_schedule(self) -> None:

@@ -42,9 +42,7 @@ class TestRebateAgreementWorkflow(OIRIntegrationTestCase):
 		if not frappe.db.exists("Workflow", "Rebate Agreement Workflow"):
 			self.skipTest("Workflow not installed - skipping")
 		wf = frappe.get_doc("Workflow", "Rebate Agreement Workflow")
-		transitions = {
-			(t.state, t.action, t.next_state) for t in wf.transitions
-		}
+		transitions = {(t.state, t.action, t.next_state) for t in wf.transitions}
 		self.assertIn(("Draft", "Submit", "Active"), transitions)
 		self.assertIn(("Active", "Cancel", "Cancelled"), transitions)
 		self.assertIn(("Active", "Expire", "Expired"), transitions)

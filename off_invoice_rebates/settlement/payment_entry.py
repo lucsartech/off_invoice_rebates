@@ -76,9 +76,7 @@ class PaymentEntryStrategy:
 		)
 		if not company:
 			frappe.throw(
-				_("Impossibile risolvere la Company per il Settlement {0}").format(
-					settlement_doc.name
-				)
+				_("Impossibile risolvere la Company per il Settlement {0}").format(settlement_doc.name)
 			)
 		return company
 
@@ -94,20 +92,13 @@ class PaymentEntryStrategy:
 		settings = frappe.get_cached_doc("Rebate Settings")
 		company_doc = frappe.get_cached_doc("Company", company)
 
-		paid_from = (
-			company_doc.default_cash_account or company_doc.default_bank_account
-		)
+		paid_from = company_doc.default_cash_account or company_doc.default_bank_account
 		if not paid_from:
 			frappe.throw(
-				_(
-					"Configurare un Cash o Bank Account di default sulla Company {0}."
-				).format(company)
+				_("Configurare un Cash o Bank Account di default sulla Company {0}.").format(company)
 			)
 
-		paid_to = (
-			company_doc.default_receivable_account
-			or settings.rebate_payable_account
-		)
+		paid_to = company_doc.default_receivable_account or settings.rebate_payable_account
 		if not paid_to:
 			frappe.throw(
 				_(

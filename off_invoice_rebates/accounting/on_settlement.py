@@ -46,9 +46,7 @@ class OnSettlementPolicy:
 			company=company,
 			posting_date=settlement_doc.settlement_date,
 			voucher_type="Journal Entry",
-			user_remark=_("Costo Premio Off-Invoice — Settlement {0}").format(
-				settlement_doc.name
-			),
+			user_remark=_("Costo Premio Off-Invoice — Settlement {0}").format(settlement_doc.name),
 			lines=[
 				{
 					"account": expense_account,
@@ -91,7 +89,7 @@ class OnSettlementPolicy:
 					policy="on_settlement",
 					posted_doc_doctype="Journal Entry",
 					posted_doc_name=names[0],
-					notes="JE annullati: {0}".format(", ".join(names)),
+					notes=f"JE annullati: {', '.join(names)}",
 				)
 			return None
 		try:

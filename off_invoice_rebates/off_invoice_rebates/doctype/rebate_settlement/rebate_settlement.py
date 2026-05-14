@@ -29,7 +29,7 @@ class RebateSettlement(Document):
 
 	def _dispatch_strategy(self) -> None:
 		# Importing the package side-effect-registers all built-in strategies.
-		from off_invoice_rebates.settlement import (  # noqa: F401
+		from off_invoice_rebates.settlement import (
 			credit_note,
 			invoice_compensation,
 			payment_entry,
@@ -41,7 +41,7 @@ class RebateSettlement(Document):
 
 	def _post_accounting(self) -> None:
 		# Importing the package side-effect-registers all built-in policies.
-		from off_invoice_rebates import accounting  # noqa: F401
+		from off_invoice_rebates import accounting
 		from off_invoice_rebates.accounting.base import get_policy
 
 		policy = get_policy(self.accounting_policy)
@@ -53,7 +53,7 @@ class RebateSettlement(Document):
 		self.db_set("status", "cancelled", update_modified=False)
 
 	def _reverse_accounting(self) -> None:
-		from off_invoice_rebates import accounting  # noqa: F401
+		from off_invoice_rebates import accounting
 		from off_invoice_rebates.accounting.base import get_policy
 
 		policy = get_policy(self.accounting_policy)
@@ -98,25 +98,15 @@ class RebateSettlement(Document):
 
 		for row in self.period_runs:
 			if not row.period_run:
-				frappe.throw(
-					_("Riga {0}: il Period Run è obbligatorio.").format(row.idx)
-				)
+				frappe.throw(_("Riga {0}: il Period Run è obbligatorio.").format(row.idx))
 			try:
 				run = frappe.get_doc("Rebate Period Run", row.period_run)
 			except frappe.DoesNotExistError:
-				frappe.throw(
-					_("Period Run {0} non trovato.").format(row.period_run)
-				)
+				frappe.throw(_("Period Run {0} non trovato.").format(row.period_run))
 			if run.agreement != self.agreement:
-				frappe.throw(
-					_(
-						"Period Run {0} appartiene a un altro Accordo Premio."
-					).format(row.period_run)
-				)
+				frappe.throw(_("Period Run {0} appartiene a un altro Accordo Premio.").format(row.period_run))
 			if run.docstatus != 1:
-				frappe.throw(
-					_("Period Run {0} non è sottomesso.").format(row.period_run)
-				)
+				frappe.throw(_("Period Run {0} non è sottomesso.").format(row.period_run))
 
 			already_settled = self._already_settled_excluding_self(row.period_run)
 			row.period_total_amount = flt(run.total_amount)
@@ -126,15 +116,15 @@ class RebateSettlement(Document):
 
 			if flt(row.amount_to_settle) <= 0:
 				frappe.throw(
-					_(
-						"L'importo da liquidare deve essere maggiore di zero per il Period Run {0}."
-					).format(row.period_run)
+					_("L'importo da liquidare deve essere maggiore di zero per il Period Run {0}.").format(
+						row.period_run
+					)
 				)
 			if flt(row.amount_to_settle) > residual + _AMOUNT_TOLERANCE:
 				frappe.throw(
-					_(
-						"L'importo da liquidare ({0}) eccede il residuo ({1}) per il Period Run {2}."
-					).format(flt(row.amount_to_settle), residual, row.period_run)
+					_("L'importo da liquidare ({0}) eccede il residuo ({1}) per il Period Run {2}.").format(
+						flt(row.amount_to_settle), residual, row.period_run
+					)
 				)
 
 	def _already_settled_excluding_self(self, period_run_name: str) -> float:

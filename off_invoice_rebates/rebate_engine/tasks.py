@@ -64,9 +64,7 @@ def _run_due_periods_for_agreement(ag_name: str, today) -> None:
 	while is_period_complete(period, today) and getdate(period.start) <= end_boundary:
 		steps += 1
 		if steps > max_periods:
-			frappe.log_error(
-				f"run_due_periods: safety cap reached for {ag_name}", "OIR scheduler"
-			)
+			frappe.log_error(f"run_due_periods: safety cap reached for {ag_name}", "OIR scheduler")
 			break
 		exists = frappe.db.exists(
 			"Rebate Period Run",

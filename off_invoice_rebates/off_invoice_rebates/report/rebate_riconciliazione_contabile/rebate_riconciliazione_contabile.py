@@ -11,7 +11,6 @@ import frappe
 from frappe import _
 from frappe.utils import flt
 
-
 EXPECTED_DOC_BY_MODE = {
 	"credit_note": "sales_invoice_nc",
 	"invoice_compensation": "journal_entry",

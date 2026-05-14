@@ -25,7 +25,7 @@ class TestCalculatorRegistry(unittest.TestCase):
 	def setUp(self) -> None:
 		try:
 			# Trigger registration of all four calculators.
-			from off_invoice_rebates.rebate_engine.calculators import (  # noqa: F401
+			from off_invoice_rebates.rebate_engine.calculators import (
 				flat_contribution,
 				target_growth,
 				turnover_tiered,
@@ -63,7 +63,7 @@ class TestCalculatorRegistry(unittest.TestCase):
 class TestSettlementRegistry(unittest.TestCase):
 	def setUp(self) -> None:
 		try:
-			from off_invoice_rebates.settlement import (  # noqa: F401
+			from off_invoice_rebates.settlement import (
 				credit_note,
 				invoice_compensation,
 				payment_entry,
@@ -83,7 +83,7 @@ class TestSettlementRegistry(unittest.TestCase):
 class TestAccountingRegistry(unittest.TestCase):
 	def setUp(self) -> None:
 		try:
-			from off_invoice_rebates.accounting import (  # noqa: F401
+			from off_invoice_rebates.accounting import (
 				full_accrual,
 				memo_only,
 				on_settlement,

@@ -34,10 +34,12 @@ def _seed_rebate_item():
 	"""
 	if frappe.db.exists("Item", "OIR-Rebate"):
 		return
-	group = (
-		frappe.db.get_value("Item Group", {"is_group": 0}, "name")
-		or "All Item Groups"
-	)
+	# Skip if ERPNext Item Group tree isn't seeded yet (e.g. fresh CI install
+	# before setup wizard). settlement.credit_note.ensure_rebate_item() will
+	# lazily create the Item on first NC emission.
+	group = frappe.db.get_value("Item Group", {"is_group": 0}, "name")
+	if not group:
+		return
 	item = frappe.new_doc("Item")
 	item.item_code = "OIR-Rebate"
 	item.item_name = "Rebate Off-Invoice"

@@ -24,9 +24,7 @@ def run_period(agreement_name: str, period: PeriodBounds) -> str:
 	"""
 	agreement = frappe.get_doc("Rebate Agreement", agreement_name)
 	if agreement.docstatus != 1:
-		frappe.throw(
-			_("Accordo {0} non è in stato submitted.").format(agreement_name)
-		)
+		frappe.throw(_("Accordo {0} non è in stato submitted.").format(agreement_name))
 
 	existing = frappe.db.get_value(
 		"Rebate Period Run",
@@ -40,9 +38,7 @@ def run_period(agreement_name: str, period: PeriodBounds) -> str:
 	if existing:
 		run = frappe.get_doc("Rebate Period Run", existing)
 		if run.docstatus == 1:
-			raise RebatePeriodLocked(
-				f"Period Run {existing} sottomesso — ricalcolo non consentito."
-			)
+			raise RebatePeriodLocked(f"Period Run {existing} sottomesso — ricalcolo non consentito.")
 		run.set("accruals", [])
 	else:
 		run = frappe.new_doc("Rebate Period Run")
@@ -74,9 +70,7 @@ def run_period(agreement_name: str, period: PeriodBounds) -> str:
 				order_by="idx asc",
 			)
 			cond_dict["tiers"] = (
-				tiers_from_db
-				if tiers_from_db
-				else [dict(t.as_dict()) for t in (cond.tiers or [])]
+				tiers_from_db if tiers_from_db else [dict(t.as_dict()) for t in (cond.tiers or [])]
 			)
 			calc = get_calculator(cond_dict["calculator_code"])
 			outcome: RebateOutcome = calc.compute(
@@ -186,9 +180,7 @@ def run_period_for_agreement(
 		if last:
 			period = next_period_after(cad, last)
 		else:
-			schedule_anchor = (
-				ag.schedules[0].anchor_date if ag.schedules else ag.start_date
-			)
+			schedule_anchor = ag.schedules[0].anchor_date if ag.schedules else ag.start_date
 			period = bounds_for_cadence(cad, schedule_anchor)
 
 	return run_period(agreement, period)

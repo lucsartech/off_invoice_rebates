@@ -13,8 +13,9 @@ routes the rebate expense / accrual to the dedicated accounts configured in
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable, ClassVar, Protocol
+from typing import ClassVar, Protocol
 
 
 @dataclass

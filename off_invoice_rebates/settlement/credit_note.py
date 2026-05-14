@@ -165,17 +165,14 @@ class CreditNoteStrategy:
 		Account selection: any existing zero-rate Sales Tax account on the
 		company, falling back to the first Tax-typed account.
 		"""
-		account_head = (
-			frappe.db.get_value(
-				"Account",
-				{"company": company, "account_type": "Tax", "is_group": 0},
-				"name",
-			)
-			or frappe.db.get_value(
-				"Account",
-				{"company": company, "is_group": 0, "account_type": "Tax"},
-				"name",
-			)
+		account_head = frappe.db.get_value(
+			"Account",
+			{"company": company, "account_type": "Tax", "is_group": 0},
+			"name",
+		) or frappe.db.get_value(
+			"Account",
+			{"company": company, "is_group": 0, "account_type": "Tax"},
+			"name",
 		)
 		if not account_head:
 			frappe.throw(
@@ -204,9 +201,7 @@ class CreditNoteStrategy:
 		)
 		if not company:
 			frappe.throw(
-				_("Impossibile risolvere la Company per il Settlement {0}").format(
-					settlement_doc.name
-				)
+				_("Impossibile risolvere la Company per il Settlement {0}").format(settlement_doc.name)
 			)
 		return company
 
@@ -220,14 +215,9 @@ def ensure_rebate_item() -> str:
 		item = frappe.new_doc("Item")
 		item.item_code = _REBATE_ITEM_CODE
 		item.item_name = "Rebate Off-Invoice"
-		item.item_group = (
-			frappe.db.get_value("Item Group", {"is_group": 0}, "name")
-			or "All Item Groups"
-		)
+		item.item_group = frappe.db.get_value("Item Group", {"is_group": 0}, "name") or "All Item Groups"
 		item.is_stock_item = 0
 		item.include_item_in_manufacturing = 0
-		item.description = (
-			"Articolo di servizio per emissione NC/Settlement Rebate Off-Invoice"
-		)
+		item.description = "Articolo di servizio per emissione NC/Settlement Rebate Off-Invoice"
 		item.insert(ignore_permissions=True)
 	return _REBATE_ITEM_CODE

@@ -20,13 +20,11 @@ from off_invoice_rebates.tests.fixtures.factories import (
 	DEFAULT_CUSTOMER,
 	DEFAULT_ITEM,
 	make_agreement,
+	make_customer,
 	make_period_run,
 	make_sales_invoice,
 )
 from off_invoice_rebates.tests.integration.base import OIRIntegrationTestCase
-
-
-from off_invoice_rebates.tests.fixtures.factories import make_customer
 
 
 class TestFlatContributionE2E(OIRIntegrationTestCase):
@@ -38,9 +36,7 @@ class TestFlatContributionE2E(OIRIntegrationTestCase):
 			condition_overrides={"flat_amount": 12000, "flat_periodicity": "annual"},
 			cadence="monthly",
 		)
-		run_name = make_period_run(
-			agreement=ag, anchor_date="2026-03-15", submit=False
-		)
+		run_name = make_period_run(agreement=ag, anchor_date="2026-03-15", submit=False)
 		run = frappe.get_doc("Rebate Period Run", run_name)
 		self.assertEqual(flt(run.total_amount), 1000.0)
 		self.assertEqual(run.compute_status, "computed")
@@ -67,9 +63,7 @@ class TestTurnoverTieredE2E(OIRIntegrationTestCase):
 			},
 			cadence="monthly",
 		)
-		run_name = make_period_run(
-			agreement=ag, anchor_date="2026-03-15", submit=False
-		)
+		run_name = make_period_run(agreement=ag, anchor_date="2026-03-15", submit=False)
 		run = frappe.get_doc("Rebate Period Run", run_name)
 		# 10 * 1000 * 1% = 100
 		self.assertAlmostEqual(flt(run.total_amount), 100.0, places=2)
@@ -85,9 +79,7 @@ class TestTurnoverTieredE2E(OIRIntegrationTestCase):
 			},
 			cadence="monthly",
 		)
-		run_name = make_period_run(
-			agreement=ag, anchor_date="2026-05-15", submit=False
-		)
+		run_name = make_period_run(agreement=ag, anchor_date="2026-05-15", submit=False)
 		run = frappe.get_doc("Rebate Period Run", run_name)
 		self.assertEqual(flt(run.total_amount), 0.0)
 
@@ -109,9 +101,7 @@ class TestVolumeCalculatorE2E(OIRIntegrationTestCase):
 			condition_overrides={"volume_unit_amount": 2, "volume_unit_of_measure": "Nos"},
 			cadence="monthly",
 		)
-		run_name = make_period_run(
-			agreement=ag, anchor_date="2026-04-10", submit=False
-		)
+		run_name = make_period_run(agreement=ag, anchor_date="2026-04-10", submit=False)
 		run = frappe.get_doc("Rebate Period Run", run_name)
 		# 50 * 2 = 100
 		self.assertEqual(flt(run.total_amount), 100.0)
@@ -139,9 +129,7 @@ class TestTargetGrowthCalculatorE2E(OIRIntegrationTestCase):
 			},
 			cadence="monthly",
 		)
-		run_name = make_period_run(
-			agreement=ag, anchor_date="2026-06-10", submit=False
-		)
+		run_name = make_period_run(agreement=ag, anchor_date="2026-06-10", submit=False)
 		run = frappe.get_doc("Rebate Period Run", run_name)
 		# excess = 3000 - 1000 = 2000; premio = 200
 		self.assertEqual(flt(run.total_amount), 200.0)
@@ -166,8 +154,6 @@ class TestTargetGrowthCalculatorE2E(OIRIntegrationTestCase):
 			},
 			cadence="monthly",
 		)
-		run_name = make_period_run(
-			agreement=ag, anchor_date="2026-07-10", submit=False
-		)
+		run_name = make_period_run(agreement=ag, anchor_date="2026-07-10", submit=False)
 		run = frappe.get_doc("Rebate Period Run", run_name)
 		self.assertEqual(flt(run.total_amount), 0.0)

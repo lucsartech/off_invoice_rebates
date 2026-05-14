@@ -87,8 +87,7 @@ def apply_pending_compensations_on_sales_invoice(doc, method=None) -> None:
 			{
 				"item_code": item_code,
 				"item_name": item.item_name,
-				"description": s.causale
-				or _("Compensazione Premio {0}").format(s.name),
+				"description": s.causale or _("Compensazione Premio {0}").format(s.name),
 				"uom": item.stock_uom or "Nos",
 				"stock_uom": item.stock_uom or "Nos",
 				"conversion_factor": 1,
@@ -145,13 +144,9 @@ def revert_compensation_on_invoice_cancel(doc, method=None) -> None:
 
 	for s_name in settlement_names:
 		try:
-			current_status = frappe.db.get_value(
-				"Rebate Settlement", s_name, "status"
-			)
+			current_status = frappe.db.get_value("Rebate Settlement", s_name, "status")
 			if current_status == "posted":
-				frappe.db.set_value(
-					"Rebate Settlement", s_name, "status", "generated"
-				)
+				frappe.db.set_value("Rebate Settlement", s_name, "status", "generated")
 		except Exception as e:
 			frappe.log_error(
 				f"revert_compensation failed for {s_name}: {e}",

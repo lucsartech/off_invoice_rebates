@@ -13,8 +13,9 @@ Strategies are pure document-generation: GL Entry posting belongs to F4 in
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable, ClassVar, Protocol
+from typing import ClassVar, Protocol
 
 
 @dataclass

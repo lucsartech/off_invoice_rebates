@@ -88,9 +88,7 @@ class FullAccrualPolicy:
 			company=company,
 			posting_date=settlement_doc.settlement_date,
 			voucher_type="Journal Entry",
-			user_remark=_(
-				"Trasferimento rateo→debito per liquidazione {0}"
-			).format(settlement_doc.name),
+			user_remark=_("Trasferimento rateo→debito per liquidazione {0}").format(settlement_doc.name),
 			lines=[
 				{
 					"account": accrued_liability,
@@ -152,6 +150,6 @@ def _cancel_je_referencing(ref_name: str, *, policy: str) -> AccountingResult | 
 			policy=policy,
 			posted_doc_doctype="Journal Entry",
 			posted_doc_name=names[0],
-			notes="JE annullati: {0}".format(", ".join(names)),
+			notes=f"JE annullati: {', '.join(names)}",
 		)
 	return None

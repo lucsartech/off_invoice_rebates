@@ -20,8 +20,7 @@ class RebatePeriodRun(Document):
 		if self.compute_status != "computed":
 			frappe.throw(
 				_(
-					"Period Run sottomettibile solo con compute_status='computed'. "
-					"Stato attuale: {0}"
+					"Period Run sottomettibile solo con compute_status='computed'. " "Stato attuale: {0}"
 				).format(self.compute_status or "—")
 			)
 
@@ -39,14 +38,12 @@ class RebatePeriodRun(Document):
 		if not self.agreement:
 			return
 		try:
-			policy_code = frappe.db.get_value(
-				"Rebate Agreement", self.agreement, "accounting_policy"
-			)
+			policy_code = frappe.db.get_value("Rebate Agreement", self.agreement, "accounting_policy")
 		except Exception:
 			return
 		if not policy_code:
 			return
-		from off_invoice_rebates import accounting  # noqa: F401
+		from off_invoice_rebates import accounting
 		from off_invoice_rebates.accounting.base import get_policy
 
 		get_policy(policy_code).post_accrual(self)
@@ -62,10 +59,7 @@ class RebatePeriodRun(Document):
 		)
 		if linked:
 			frappe.throw(
-				_(
-					"Impossibile cancellare: questo Period Run è già stato liquidato "
-					"in un Settlement."
-				)
+				_("Impossibile cancellare: questo Period Run è già stato liquidato " "in un Settlement.")
 			)
 		self._reverse_accrual()
 
@@ -73,14 +67,12 @@ class RebatePeriodRun(Document):
 		if not self.agreement:
 			return
 		try:
-			policy_code = frappe.db.get_value(
-				"Rebate Agreement", self.agreement, "accounting_policy"
-			)
+			policy_code = frappe.db.get_value("Rebate Agreement", self.agreement, "accounting_policy")
 		except Exception:
 			return
 		if not policy_code:
 			return
-		from off_invoice_rebates import accounting  # noqa: F401
+		from off_invoice_rebates import accounting
 		from off_invoice_rebates.accounting.base import get_policy
 
 		get_policy(policy_code).reverse_accrual(self)
@@ -106,9 +98,9 @@ class RebatePeriodRun(Document):
 		)
 		if existing:
 			frappe.throw(
-				_(
-					"Esiste già un Period Run per Accordo {0} periodo {1}: {2}."
-				).format(self.agreement, self.period_key, existing)
+				_("Esiste già un Period Run per Accordo {0} periodo {1}: {2}.").format(
+					self.agreement, self.period_key, existing
+				)
 			)
 
 	def _populate_from_agreement(self) -> None:

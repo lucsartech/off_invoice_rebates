@@ -8,4 +8,4 @@ Importing the package side-effect-registers all built-in policies
 :mod:`off_invoice_rebates.accounting.base`.
 """
 
-from off_invoice_rebates.accounting import full_accrual, memo_only, on_settlement  # noqa: F401
+from off_invoice_rebates.accounting import full_accrual, memo_only, on_settlement

@@ -23,8 +23,8 @@ Helpers exposed:
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from decimal import Decimal
-from typing import Iterable
 
 import frappe
 from frappe.utils import flt, today
@@ -128,9 +128,7 @@ def make_item(item_code: str = DEFAULT_ITEM, uom: str = DEFAULT_UOM) -> str:
 	item = frappe.new_doc("Item")
 	item.item_code = item_code
 	item.item_name = item_code
-	item.item_group = (
-		frappe.db.get_value("Item Group", {"is_group": 0}, "name") or "All Item Groups"
-	)
+	item.item_group = frappe.db.get_value("Item Group", {"is_group": 0}, "name") or "All Item Groups"
 	item.stock_uom = uom
 	item.is_stock_item = 0
 	item.include_item_in_manufacturing = 0
@@ -185,9 +183,7 @@ def _purge_customer_invoices(customer: str) -> None:
 			si = frappe.get_doc("Sales Invoice", si_name)
 			if si.docstatus == 1:
 				si.cancel()
-			frappe.delete_doc(
-				"Sales Invoice", si_name, force=True, ignore_permissions=True
-			)
+			frappe.delete_doc("Sales Invoice", si_name, force=True, ignore_permissions=True)
 		except Exception:
 			pass
 	frappe.db.commit()
@@ -343,9 +339,7 @@ def make_agreement(
 	# them explicitly after the parent Rebate Condition has a stable name.
 	tiers_in_memory: list[dict] = []
 	if calculator_code == "turnover_tiered":
-		tiers_in_memory = tiers_override or [
-			{"from_amount": 0, "to_amount": 0, "percentage": 1}
-		]
+		tiers_in_memory = tiers_override or [{"from_amount": 0, "to_amount": 0, "percentage": 1}]
 		for t in tiers_in_memory:
 			cond_row.append("tiers", t)
 
@@ -381,9 +375,7 @@ def make_agreement(
 			fields=["name", "from_amount", "to_amount", "percentage", "idx"],
 			order_by="idx asc",
 		)
-		ag.conditions[0].tiers = [
-			frappe.get_doc("Rebate Tier", row["name"]) for row in hydrated
-		]
+		ag.conditions[0].tiers = [frappe.get_doc("Rebate Tier", row["name"]) for row in hydrated]
 	if submit:
 		ag.submit()
 	return ag.name
@@ -469,14 +461,16 @@ def make_period_run(
 	"""
 	from off_invoice_rebates.rebate_engine.dispatcher import run_period_for_agreement
 
-	cad = cadence or frappe.db.get_value(
-		"Rebate Schedule",
-		{"parent": agreement},
-		"cadence",
-	) or "monthly"
-	run_name = run_period_for_agreement(
-		agreement=agreement, cadence=cad, anchor_date=anchor_date
+	cad = (
+		cadence
+		or frappe.db.get_value(
+			"Rebate Schedule",
+			{"parent": agreement},
+			"cadence",
+		)
+		or "monthly"
 	)
+	run_name = run_period_for_agreement(agreement=agreement, cadence=cad, anchor_date=anchor_date)
 	if submit:
 		run = frappe.get_doc("Rebate Period Run", run_name)
 		if run.docstatus == 0:

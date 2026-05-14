@@ -65,9 +65,7 @@ class RebateSettings(Document):
 
 		if sales_invoice_options and sales_invoice_options.options:
 			existing_series = {
-				line.strip()
-				for line in sales_invoice_options.options.split("\n")
-				if line.strip()
+				line.strip() for line in sales_invoice_options.options.split("\n") if line.strip()
 			}
 			if nc_series in existing_series:
 				frappe.msgprint(
