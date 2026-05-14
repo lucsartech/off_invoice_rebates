@@ -25,11 +25,44 @@ def before_tests():
 	from erpnext.setup.utils import before_tests as erpnext_before_tests
 
 	erpnext_before_tests()
+	# The setup wizard / site reset can leave our workflow unsynced — re-import
+	# the Workflow + its master states so submittable DocTypes work in tests.
+	_sync_workflows()
+	frappe.db.commit()
+
+
+# Workflow State masters + Workflow Action Master referenced by our workflow.
+# import_file_by_path on the Workflow JSON imports the Workflow + its child
+# rows, but NOT these standalone master records — on a fresh site (e.g. CI)
+# they may be missing, causing "Could not find Workflow State: Draft" on submit.
+_WORKFLOW_STATES = [
+	("Draft", "Warning"),
+	("Active", "Success"),
+	("Expired", "Inverse"),
+	("Cancelled", "Danger"),
+]
+_WORKFLOW_ACTIONS = ["Submit", "Cancel", "Expire"]
+
+
+def _ensure_workflow_masters():
+	for name, style in _WORKFLOW_STATES:
+		if not frappe.db.exists("Workflow State", name):
+			doc = frappe.new_doc("Workflow State")
+			doc.workflow_state_name = name
+			doc.style = style
+			doc.insert(ignore_permissions=True)
+	for name in _WORKFLOW_ACTIONS:
+		if not frappe.db.exists("Workflow Action Master", name):
+			doc = frappe.new_doc("Workflow Action Master")
+			doc.workflow_action_name = name
+			doc.insert(ignore_permissions=True)
 
 
 def _sync_workflows():
 	"""Workflow non è in IMPORTABLE_DOCTYPES → bench install/migrate non lo carica:
-	importiamo manualmente i JSON in <module>/workflow/."""
+	importiamo manualmente i JSON in <module>/workflow/. Prima garantiamo che
+	esistano i master Workflow State / Workflow Action Master referenziati."""
+	_ensure_workflow_masters()
 	workflow_root = os.path.join(frappe.get_module_path("Off-Invoice Rebates"), "workflow")
 	if not os.path.isdir(workflow_root):
 		return
